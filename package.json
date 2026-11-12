@@ -1,0 +1,31 @@
+{
+  "name": "members-only",
+  "version": "1.0.0",
+  "description": "an exclusive clubhouse where members can write anonymous posts",
+  "homepage": "https://github.com/mumtahinanur/members-only#readme",
+  "bugs": {
+    "url": "https://github.com/mumtahinanur/members-only/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mumtahinanur/members-only.git"
+  },
+  "license": "ISC",
+  "author": "Mumtahina Nur",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-pg-simple": "^10.0.0",
+    "ejs": "^7.0.2",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.2",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.23.1"
+  }
+}
