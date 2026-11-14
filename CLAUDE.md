@@ -19,6 +19,13 @@ Follow a clean MVC-style separation:
 - `db/queries.js` — All raw SQL queries abstracted into reusable async functions
 - `db/populatedb.js` — Script to create tables (`users`, `messages`, `session`) and seed initial test data
 
+## Database Schema
+- `users`: `id`, `first_name`, `last_name`, `username` (unique, stored lowercase), `password_hash`, `is_member` (default false), `is_admin` (default false)
+- `messages`: `id`, `title`, `text`, `created_at` (TIMESTAMPTZ, default NOW()), `user_id` → `users(id)` ON DELETE CASCADE
+- `session`: standard connect-pg-simple table (`sid`, `sess`, `expire`)
+- Setup: `node db/populatedb.js <connection-string>`. Non-destructive: uses `CREATE TABLE IF NOT EXISTS` and seeds only when `users` is empty. To reseed, drop the tables first. Seed accounts (password `password123`): admin (member+admin), member (member), outsider (non-member).
+- Env vars: `DATABASE_URL`, `PORT` (optional)
+
 ## Workflow & Learning Rules
 - **Step-by-Step Execution:** Build one milestone at a time. Wait for my confirmation and testing before moving to the next feature.
 - **Explain Decisions:** After implementing authentication, session configuration, or middleware logic, briefly explain how the pieces connect so I can learn from the code.
@@ -26,9 +33,5 @@ Follow a clean MVC-style separation:
 
 ## Self-Updating Documentation Rule
 - **Keep `CLAUDE.md` Current:** Whenever you add new dependencies, create or rename files/folders, alter database schemas, add new routes, or introduce new environment variables, automatically update the relevant sections of `CLAUDE.md` before finishing the task.
-- **Track Implementation Progress:** Maintain a `## Current Status` section at the bottom of `CLAUDE.md` checking off completed milestones and noting any pending work or known edge cases so every new session starts with accurate context.
 
-## Current Status
-- [x] Milestone 1: Project skeleton, Express setup (app.js, views, public; awaiting user test)
-
-Notes: project uses ESM (`"type": "module"`); env vars load via Node's `--env-file=.env` (npm scripts `dev`/`start`), so `dotenv` isn't needed at runtime. `PORT` env var optional (default 3000).
+Notes: project uses ESM (`"type": "module"`); env vars load via Node's `--env-file=.env` (npm scripts `dev`/`start`), so `dotenv` isn't needed at runtime. `PORT` env var optional (default 8000).

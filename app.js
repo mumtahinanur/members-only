@@ -33,7 +33,9 @@ app.use((err, req, res, next) => {
 });
 
 
-app.listen(PORT, (err) => {
-  if (err) throw err;
+app.listen(PORT, (error) => {
+  if (error) {
+    throw error;
+  }
   console.log(`Members Only listening on http://localhost:${PORT}`);
 });
