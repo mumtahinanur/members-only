@@ -1,5 +1,6 @@
 import express from "express";
 import path from "node:path";
+import authRouter from "./routes/authRouter.js";
 
 const PORT = process.env.PORT || 8000;
 
@@ -17,6 +18,7 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
 app.get("/", (req, res) => {
   res.render("index", { title: "Members Only" });
 });
+app.use("/", authRouter);
 
 // 404 handler (runs when no route matched)
 app.use((req, res) => {

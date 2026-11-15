@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1><a href="/">Members Only</a></h1>
+  </header>
+  <main>
+    <h2>Sign up</h2>
+
+    <% if (errors.length) { %>
+      <ul class="errors" role="alert">
+        <% errors.forEach((error) => { %>
+          <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form action="/sign-up" method="post" class="form">
+      <label for="firstName">First name</label>
+      <input id="firstName" name="firstName" type="text" required maxlength="100"
+             autocomplete="given-name" value="<%= values.firstName || '' %>">
+
+      <label for="lastName">Last name</label>
+      <input id="lastName" name="lastName" type="text" required maxlength="100"
+             autocomplete="family-name" value="<%= values.lastName || '' %>">
+
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" required minlength="3" maxlength="50"
+             autocomplete="username" value="<%= values.username || '' %>">
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required minlength="8"
+             autocomplete="new-password">
+
+      <label for="confirmPassword">Confirm password</label>
+      <input id="confirmPassword" name="confirmPassword" type="password" required minlength="8"
+             autocomplete="new-password">
+
+      <button type="submit">Create account</button>
+    </form>
+  </main>
+</body>
+</html>

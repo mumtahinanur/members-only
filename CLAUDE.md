@@ -13,7 +13,9 @@ An exclusive clubhouse web application where authenticated users can post messag
 ## Architecture & Directory Structure
 Follow a clean MVC-style separation:
 - `app.js` — Express entry point (ESM): view engine, middleware, routes, 404/error handlers
-- `views/` — EJS templates (`index.ejs`, `error.ejs`)
+- `routes/` — Express routers (`authRouter.js`: `GET`/`POST /sign-up`)
+- `controllers/` — Request handlers + express-validator chains (`authController.js`: sign-up)
+- `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `error.ejs`)
 - `public/` — static assets (`styles.css`)
 - `db/pool.js` — PostgreSQL connection pool configuration
 - `db/queries.js` — All raw SQL queries abstracted into reusable async functions
