@@ -14,7 +14,8 @@ An exclusive clubhouse web application where authenticated users can post messag
 Follow a clean MVC-style separation:
 - `app.js` — Express entry point (ESM): view engine, middleware, routes, 404/error handlers
 - `routes/` — Express routers (`authRouter.js`: `GET`/`POST /sign-up`)
-- `controllers/` — Request handlers + express-validator chains (`authController.js`: sign-up)
+- `controllers/` — Request handlers (`authController.js`: sign-up)
+- `validators/` — express-validator chains, attached in routers before the controller handler (`authValidators.js`: `validateSignUp`)
 - `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `error.ejs`)
 - `public/` — static assets (`styles.css`)
 - `db/pool.js` — PostgreSQL connection pool configuration
