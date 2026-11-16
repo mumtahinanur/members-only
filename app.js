@@ -1,5 +1,7 @@
 import express from "express";
 import path from "node:path";
+import sessionMiddleware from "./config/session.js";
+import passport from "./config/passport.js";
 import authRouter from "./routes/authRouter.js";
 
 const PORT = process.env.PORT || 8000;
@@ -13,6 +15,18 @@ app.set("views", path.join(import.meta.dirname, "views"));
 // Middleware: parse HTML form bodies and serve static assets from /public
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(import.meta.dirname, "public")));
+
+// Sessions (config/session.js) must come before passport.session()
+app.use(sessionMiddleware);
+
+// Passport reads the user id from the session and sets req.user
+app.use(passport.session());
+
+// Make the logged-in user (or undefined) available in every view
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
 
 // Routes
 app.get("/", (req, res) => {

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1><a href="/">Members Only</a></h1>
+  </header>
+  <main>
+    <h2>Log in</h2>
+
+    <% if (errors.length) { %>
+      <ul class="errors" role="alert">
+        <% errors.forEach((error) => { %>
+          <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form action="/log-in" method="post" class="form">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" required
+             autocomplete="username" value="<%= values.username || '' %>">
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required
+             autocomplete="current-password">
+
+      <button type="submit">Log in</button>
+    </form>
+
+    <p>No account yet? <a href="/sign-up">Sign up</a></p>
+  </main>
+</body>
+</html>

@@ -13,10 +13,12 @@ An exclusive clubhouse web application where authenticated users can post messag
 ## Architecture & Directory Structure
 Follow a clean MVC-style separation:
 - `app.js` — Express entry point (ESM): view engine, middleware, routes, 404/error handlers
-- `routes/` — Express routers (`authRouter.js`: `GET`/`POST /sign-up`)
-- `controllers/` — Request handlers (`authController.js`: sign-up)
-- `validators/` — express-validator chains, attached in routers before the controller handler (`authValidators.js`: `validateSignUp`)
-- `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `error.ejs`)
+- `config/session.js` — express-session middleware with connect-pg-simple store (1-day cookie, httpOnly, secure in production)
+- `config/passport.js` — passport-local strategy (bcrypt compare), serialize/deserialize user by id
+- `routes/` — Express routers (`authRouter.js`: `GET`/`POST /sign-up`, `GET`/`POST /log-in`, `POST /log-out`)
+- `controllers/` — Request handlers (`authController.js`: sign-up, log-in, log-out)
+- `validators/` — express-validator chains, attached in routers before the controller handler; each array ends with `handleErrors(view, title)`, which re-renders the form on failure, so controllers only handle valid input (`authValidators.js`: `validateSignUp`, `validateLogin`)
+- `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `log-in.ejs`, `error.ejs`); every view gets `currentUser` via `res.locals`
 - `public/` — static assets (`styles.css`)
 - `db/pool.js` — PostgreSQL connection pool configuration
 - `db/queries.js` — All raw SQL queries abstracted into reusable async functions
@@ -27,7 +29,7 @@ Follow a clean MVC-style separation:
 - `messages`: `id`, `title`, `text`, `created_at` (TIMESTAMPTZ, default NOW()), `user_id` → `users(id)` ON DELETE CASCADE
 - `session`: standard connect-pg-simple table (`sid`, `sess`, `expire`)
 - Setup: `node db/populatedb.js <connection-string>`. Non-destructive: uses `CREATE TABLE IF NOT EXISTS` and seeds only when `users` is empty. To reseed, drop the tables first. Seed accounts (password `password123`): admin (member+admin), member (member), outsider (non-member).
-- Env vars: `DATABASE_URL`, `PORT` (optional)
+- Env vars: `DATABASE_URL`, `SESSION_SECRET` (signs the session cookie), `PORT` (optional), `NODE_ENV` (optional; `production` enables secure cookies)
 
 ## Workflow & Learning Rules
 - **Step-by-Step Execution:** Build one milestone at a time. Wait for my confirmation and testing before moving to the next feature.

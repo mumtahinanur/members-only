@@ -1,10 +1,19 @@
-import { body } from "express-validator";
+import { body, validationResult } from "express-validator";
 import * as db from "../db/queries.js";
 
 // Validation + sanitization rules for the auth forms.
 // Each body("field") chain runs top to bottom: sanitizers (trim, toLowerCase)
-// change the value, validators (notEmpty, isLength...) check it.
-// The chains only record errors; the controller reads them with validationResult.
+// change the value in req.body, validators (notEmpty, isLength...) check it.
+// The chains only record errors; handleErrors (the last step) acts on them.
+
+// Last step of every validator array: if any rule failed, re-render the
+// form with the messages; otherwise continue to the controller.
+const handleErrors = (view, title) => (req, res, next) => {
+  const errors = validationResult(req);
+  if (errors.isEmpty()) return next();
+  // values: req.body is safe — the views never put passwords back in the inputs.
+  res.status(400).render(view, { title, errors: errors.array(), values: req.body });
+};
 
 export const validateSignUp = [
   body("firstName")
@@ -36,4 +45,19 @@ export const validateSignUp = [
   body("confirmPassword")
     .custom((value, { req }) => value === req.body.password)
     .withMessage("Passwords do not match."),
+
+  handleErrors("sign-up", "Sign up"),
+];
+
+// Login only checks the fields are filled in; passport checks the credentials.
+export const validateLogin = [
+  body("username")
+    .trim()
+    .toLowerCase()
+    .notEmpty().withMessage("Username is required."),
+
+  body("password")
+    .notEmpty().withMessage("Password is required."),
+
+  handleErrors("log-in", "Log in"),
 ];

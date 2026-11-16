@@ -9,10 +9,24 @@
 <body>
   <header>
     <h1><a href="/">Members Only</a></h1>
-    <nav><a href="/sign-up">Sign up</a></nav>
+    <nav>
+      <% if (currentUser) { %>
+        <span>Hi, <%= currentUser.first_name %></span>
+        <form action="/log-out" method="post" class="inline-form">
+          <button type="submit" class="link-button">Log out</button>
+        </form>
+      <% } else { %>
+        <a href="/sign-up">Sign up</a>
+        <a href="/log-in">Log in</a>
+      <% } %>
+    </nav>
   </header>
   <main>
-    <p>Welcome to the clubhouse.</p>
+    <% if (currentUser) { %>
+      <p>Welcome to the clubhouse, <%= currentUser.first_name %>.</p>
+    <% } else { %>
+      <p>Welcome to the clubhouse.</p>
+    <% } %>
   </main>
 </body>
 </html>
