@@ -30,10 +30,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
-app.get("/", (req, res) => {
-  res.render("index", { title: "Members Only" });
-});
+// Routes (home page "/" lives in messageRouter)
 app.use("/", authRouter);
 app.use("/", clubRouter);
 app.use("/", messageRouter);

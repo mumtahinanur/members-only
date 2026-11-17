@@ -33,6 +33,29 @@
     <% } else { %>
       <p>Welcome to the clubhouse.</p>
     <% } %>
+
+    <% if (!isMember) { %>
+      <p class="hint">Only club members can see who wrote each message and when.</p>
+    <% } %>
+
+    <% if (messages.length === 0) { %>
+      <p>No messages yet.</p>
+    <% } %>
+
+    <% messages.forEach((message) => { %>
+      <article class="message">
+        <h2><%= message.title %></h2>
+        <p class="message-text"><%= message.text %></p>
+        <% if (isMember) { %>
+          <p class="message-meta">
+            By <%= message.author %> ·
+            <time datetime="<%= message.isoDate %>"><%= message.date %></time>
+          </p>
+        <% } else { %>
+          <p class="message-meta">By Anonymous</p>
+        <% } %>
+      </article>
+    <% }) %>
   </main>
 </body>
 </html>

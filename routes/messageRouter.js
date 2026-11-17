@@ -1,9 +1,16 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middleware/auth.js";
 import { validateMessage } from "../validators/messageValidators.js";
-import { newMessageGet, newMessagePost } from "../controllers/messageController.js";
+import {
+  index,
+  newMessageGet,
+  newMessagePost,
+} from "../controllers/messageController.js";
 
 const messageRouter = Router();
+
+// Home page: message list, open to everyone (author/date for members only)
+messageRouter.get("/", index);
 
 // isAuthenticated on both: hiding the link isn't enough, since anyone
 // could type the URL directly.
