@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1><a href="/">Members Only</a></h1>
+  </header>
+  <main>
+    <h2>Create a new message</h2>
+
+    <% if (errors.length) { %>
+      <ul class="errors" role="alert">
+        <% errors.forEach((error) => { %>
+          <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <%# title = page title; values.title = the message title the user typed %>
+    <form action="/messages/new" method="post" class="form">
+      <label for="title">Title</label>
+      <input id="title" name="title" type="text" required maxlength="255"
+             value="<%= values.title || '' %>">
+
+      <label for="text">Message</label>
+      <textarea id="text" name="text" rows="6" required maxlength="2000"><%= values.text || '' %></textarea>
+
+      <button type="submit">Post message</button>
+    </form>
+  </main>
+</body>
+</html>

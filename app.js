@@ -4,6 +4,7 @@ import sessionMiddleware from "./config/session.js";
 import passport from "./config/passport.js";
 import authRouter from "./routes/authRouter.js";
 import clubRouter from "./routes/clubRouter.js";
+import messageRouter from "./routes/messageRouter.js";
 
 const PORT = process.env.PORT || 8000;
 
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 });
 app.use("/", authRouter);
 app.use("/", clubRouter);
+app.use("/", messageRouter);
 
 // 404 handler (runs when no route matched)
 app.use((req, res) => {

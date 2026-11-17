@@ -16,10 +16,10 @@ Follow a clean MVC-style separation:
 - `config/session.js` — express-session middleware with connect-pg-simple store (1-day cookie, httpOnly, secure in production)
 - `config/passport.js` — passport-local strategy (bcrypt compare), serialize/deserialize user by id
 - `middleware/auth.js` — route guards (`isAuthenticated`: redirects to `/log-in` when logged out)
-- `routes/` — Express routers (`authRouter.js`: `GET`/`POST /sign-up`, `GET`/`POST /log-in`, `POST /log-out`; `clubRouter.js`: `GET`/`POST /join-club`, login required)
-- `controllers/` — Request handlers (`authController.js`: sign-up, log-in, log-out; `clubController.js`: join the club via `setMember`)
-- `validators/` — express-validator chains, attached in routers before the controller handler; each array ends with `handleErrors(view, title)`, which re-renders the form on failure, so controllers only handle valid input (`handleErrors.js`: shared error step; `authValidators.js`: `validateSignUp`, `validateLogin`; `clubValidators.js`: `validateJoinClub` checks passcode against `CLUB_PASSCODE`)
-- `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `log-in.ejs`, `join-club.ejs`, `error.ejs`); every view gets `currentUser` via `res.locals`
+- `routes/` — Express routers (`authRouter.js`: `GET`/`POST /sign-up`, `GET`/`POST /log-in`, `POST /log-out`; `clubRouter.js`: `GET`/`POST /join-club`, login required; `messageRouter.js`: `GET`/`POST /messages/new`, login required)
+- `controllers/` — Request handlers (`authController.js`: sign-up, log-in, log-out; `clubController.js`: join the club via `setMember`; `messageController.js`: create message via `createMessage`, author = `req.user.id`)
+- `validators/` — express-validator chains, attached in routers before the controller handler; each array ends with `handleErrors(view, title)`, which re-renders the form on failure, so controllers only handle valid input (`handleErrors.js`: shared error step; `authValidators.js`: `validateSignUp`, `validateLogin`; `clubValidators.js`: `validateJoinClub` checks passcode against `CLUB_PASSCODE`; `messageValidators.js`: `validateMessage`)
+- `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `log-in.ejs`, `join-club.ejs`, `new-message.ejs`, `error.ejs`); every view gets `currentUser` via `res.locals`
 - `public/` — static assets (`styles.css`)
 - `db/pool.js` — PostgreSQL connection pool configuration
 - `db/queries.js` — All raw SQL queries abstracted into reusable async functions
