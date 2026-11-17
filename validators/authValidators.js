@@ -1,19 +1,11 @@
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import * as db from "../db/queries.js";
+import handleErrors from "./handleErrors.js";
 
 // Validation + sanitization rules for the auth forms.
 // Each body("field") chain runs top to bottom: sanitizers (trim, toLowerCase)
 // change the value in req.body, validators (notEmpty, isLength...) check it.
 // The chains only record errors; handleErrors (the last step) acts on them.
-
-// Last step of every validator array: if any rule failed, re-render the
-// form with the messages; otherwise continue to the controller.
-const handleErrors = (view, title) => (req, res, next) => {
-  const errors = validationResult(req);
-  if (errors.isEmpty()) return next();
-  // values: req.body is safe — the views never put passwords back in the inputs.
-  res.status(400).render(view, { title, errors: errors.array(), values: req.body });
-};
 
 export const validateSignUp = [
   body("firstName")

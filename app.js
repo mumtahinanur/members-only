@@ -3,6 +3,7 @@ import path from "node:path";
 import sessionMiddleware from "./config/session.js";
 import passport from "./config/passport.js";
 import authRouter from "./routes/authRouter.js";
+import clubRouter from "./routes/clubRouter.js";
 
 const PORT = process.env.PORT || 8000;
 
@@ -33,6 +34,7 @@ app.get("/", (req, res) => {
   res.render("index", { title: "Members Only" });
 });
 app.use("/", authRouter);
+app.use("/", clubRouter);
 
 // 404 handler (runs when no route matched)
 app.use((req, res) => {

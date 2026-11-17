@@ -12,6 +12,11 @@
     <nav>
       <% if (currentUser) { %>
         <span>Hi, <%= currentUser.first_name %></span>
+        <% if (currentUser.is_member) { %>
+          <span class="badge">Member</span>
+        <% } else { %>
+          <a href="/join-club">Join the club</a>
+        <% } %>
         <form action="/log-out" method="post" class="inline-form">
           <button type="submit" class="link-button">Log out</button>
         </form>
