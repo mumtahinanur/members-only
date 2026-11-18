@@ -17,6 +17,11 @@
         <% } else { %>
           <a href="/join-club">Join the club</a>
         <% } %>
+        <% if (currentUser.is_admin) { %>
+          <span class="badge">Admin</span>
+        <% } else { %>
+          <a href="/become-admin">Become admin</a>
+        <% } %>
         <a href="/messages/new">Create a new message</a>
         <form action="/log-out" method="post" class="inline-form">
           <button type="submit" class="link-button">Log out</button>
@@ -53,6 +58,12 @@
           </p>
         <% } else { %>
           <p class="message-meta">By Anonymous</p>
+        <% } %>
+        <% if (isAdmin) { %>
+          <form action="/messages/<%= message.id %>/delete" method="post"
+                class="delete-form" onsubmit="return confirm('Delete this message?');">
+            <button type="submit" class="link-button danger">Delete</button>
+          </form>
         <% } %>
       </article>
     <% }) %>

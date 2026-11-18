@@ -32,6 +32,14 @@ export async function setMember(userId, isMember = true) {
   ]);
 }
 
+// Admins are always members too, so they can see message authors.
+export async function setAdmin(userId) {
+  await pool.query(
+    "UPDATE users SET is_admin = TRUE, is_member = TRUE WHERE id = $1",
+    [userId],
+  );
+}
+
 // ---------- Messages ----------
 
 export async function createMessage({ title, text, userId }) {

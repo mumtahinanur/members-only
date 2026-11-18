@@ -15,11 +15,11 @@ Follow a clean MVC-style separation:
 - `app.js` — Express entry point (ESM): view engine, middleware, routes, 404/error handlers
 - `config/session.js` — express-session middleware with connect-pg-simple store (1-day cookie, httpOnly, secure in production)
 - `config/passport.js` — passport-local strategy (bcrypt compare), serialize/deserialize user by id
-- `middleware/auth.js` — route guards (`isAuthenticated`: redirects to `/log-in` when logged out)
-- `routes/` — Express routers (`authRouter.js`: `GET`/`POST /sign-up`, `GET`/`POST /log-in`, `POST /log-out`; `clubRouter.js`: `GET`/`POST /join-club`, login required; `messageRouter.js`: `GET /` home message list (author/date only for members), `GET`/`POST /messages/new`, login required)
-- `controllers/` — Request handlers (`authController.js`: sign-up, log-in, log-out; `clubController.js`: join the club via `setMember`; `messageController.js`: `index` lists messages via `getAllMessages` and strips author/date for non-members; create message via `createMessage`, author = `req.user.id`)
-- `validators/` — express-validator chains, attached in routers before the controller handler; each array ends with `handleErrors(view, title)`, which re-renders the form on failure, so controllers only handle valid input (`handleErrors.js`: shared error step; `authValidators.js`: `validateSignUp`, `validateLogin`; `clubValidators.js`: `validateJoinClub` checks passcode against `CLUB_PASSCODE`; `messageValidators.js`: `validateMessage`)
-- `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `log-in.ejs`, `join-club.ejs`, `new-message.ejs`, `error.ejs`); every view gets `currentUser` via `res.locals`
+- `middleware/auth.js` — route guards (`isAuthenticated`: redirects to `/log-in` when logged out; `isAdmin`: 403 unless `req.user.is_admin`)
+- `routes/` — Express routers (`authRouter.js`: `GET`/`POST /sign-up`, `GET`/`POST /log-in`, `POST /log-out`; `clubRouter.js`: `GET`/`POST /join-club`, `GET`/`POST /become-admin`, login required; `messageRouter.js`: `GET /` home message list (author/date only for members), `GET`/`POST /messages/new` login required, `POST /messages/:id/delete` admin only)
+- `controllers/` — Request handlers (`authController.js`: sign-up, log-in, log-out; `clubController.js`: join the club via `setMember`, become admin via `setAdmin` (also makes member); `messageController.js`: `index` lists messages via `getAllMessages` and strips author/date for non-members, passes `isAdmin` for delete buttons; create message via `createMessage`, author = `req.user.id`; `deleteMessagePost` via `deleteMessage`)
+- `validators/` — express-validator chains, attached in routers before the controller handler; each array ends with `handleErrors(view, title)`, which re-renders the form on failure, so controllers only handle valid input (`handleErrors.js`: shared error step; `authValidators.js`: `validateSignUp`, `validateLogin`; `clubValidators.js`: `validateJoinClub` checks passcode against `CLUB_PASSCODE`, `validateBecomeAdmin` against `ADMIN_PASSCODE`; `messageValidators.js`: `validateMessage`)
+- `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `log-in.ejs`, `join-club.ejs`, `become-admin.ejs`, `new-message.ejs`, `error.ejs`); every view gets `currentUser` via `res.locals`
 - `public/` — static assets (`styles.css`)
 - `db/pool.js` — PostgreSQL connection pool configuration
 - `db/queries.js` — All raw SQL queries abstracted into reusable async functions
@@ -30,7 +30,7 @@ Follow a clean MVC-style separation:
 - `messages`: `id`, `title`, `text`, `created_at` (TIMESTAMPTZ, default NOW()), `user_id` → `users(id)` ON DELETE CASCADE
 - `session`: standard connect-pg-simple table (`sid`, `sess`, `expire`)
 - Setup: `node db/populatedb.js <connection-string>`. Non-destructive: uses `CREATE TABLE IF NOT EXISTS` and seeds only when `users` is empty. To reseed, drop the tables first. Seed accounts (password `password123`): admin (member+admin), member (member), outsider (non-member).
-- Env vars: `DATABASE_URL`, `SESSION_SECRET` (signs the session cookie), `CLUB_PASSCODE` (secret to become a member; unset = nobody can join), `PORT` (optional), `NODE_ENV` (optional; `production` enables secure cookies)
+- Env vars: `DATABASE_URL`, `SESSION_SECRET` (signs the session cookie), `CLUB_PASSCODE` (secret to become a member; unset = nobody can join), `ADMIN_PASSCODE` (secret to become admin + member; unset = nobody can), `PORT` (optional), `NODE_ENV` (optional; `production` enables secure cookies)
 
 ## Workflow & Learning Rules
 - **Step-by-Step Execution:** Build one milestone at a time. Wait for my confirmation and testing before moving to the next feature.

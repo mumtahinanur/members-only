@@ -71,6 +71,14 @@ nav {
   cursor: pointer;
 }
 
+.delete-form {
+  margin-top: 0.5rem;
+}
+
+.link-button.danger {
+  color: #b00;
+}
+
 header h1 a {
   color: inherit;
   text-decoration: none;

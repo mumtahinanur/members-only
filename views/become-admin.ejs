@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1><a href="/">Members Only</a></h1>
+  </header>
+  <main>
+    <h2>Become admin</h2>
+
+    <% if (currentUser.is_admin) { %>
+      <p>You're already an admin.</p>
+      <p><a href="/">Back home</a></p>
+    <% } else { %>
+      <p>Know the admin passcode? Enter it to become an admin (and a member).</p>
+
+      <% if (errors.length) { %>
+        <ul class="errors" role="alert">
+          <% errors.forEach((error) => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <form action="/become-admin" method="post" class="form">
+        <label for="passcode">Admin passcode</label>
+        <input id="passcode" name="passcode" type="password" required autocomplete="off">
+
+        <button type="submit">Become admin</button>
+      </form>
+    <% } %>
+  </main>
+</body>
+</html>

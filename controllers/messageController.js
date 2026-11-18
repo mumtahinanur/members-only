@@ -1,4 +1,4 @@
-import { createMessage, getAllMessages } from "../db/queries.js";
+import { createMessage, getAllMessages, deleteMessage } from "../db/queries.js";
 
 // e.g. "17 Nov 2026 · 8:27 PM"
 const formatDate = (date) =>
@@ -25,7 +25,8 @@ export async function index(req, res) {
       : { id: m.id, title: m.title, text: m.text },
   );
 
-  res.render("index", { title: "Members Only", messages, isMember });
+  const isAdmin = Boolean(req.user?.is_admin);
+  res.render("index", { title: "Members Only", messages, isMember, isAdmin });
 }
 
 export function newMessageGet(req, res) {
@@ -38,5 +39,18 @@ export function newMessageGet(req, res) {
 export async function newMessagePost(req, res) {
   const { title, text } = req.body;
   await createMessage({ title, text, userId: req.user.id });
+  res.redirect("/");
+}
+
+// Only reached by admins (isAuthenticated + isAdmin in the router).
+export async function deleteMessagePost(req, res) {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id < 1) {
+    return res.status(404).render("error", {
+      title: "Not Found",
+      message: "Message not found.",
+    });
+  }
+  await deleteMessage(id);
   res.redirect("/");
 }
