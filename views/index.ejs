@@ -61,12 +61,28 @@
         <% } %>
         <% if (isAdmin) { %>
           <form action="/messages/<%= message.id %>/delete" method="post"
-                class="delete-form" onsubmit="return confirm('Delete this message?');">
+                class="delete-form" data-title="<%= message.title %>">
             <button type="submit" class="link-button danger">Delete</button>
           </form>
         <% } %>
       </article>
     <% }) %>
+
+    <% if (isAdmin) { %>
+      <%# One shared pop-up; public/js/confirm-delete.js opens it for whichever Delete was clicked %>
+      <dialog id="delete-dialog" class="dialog">
+        <%# method="dialog": buttons close the pop-up and set dialog.returnValue, no request sent %>
+        <form method="dialog">
+          <h2>Delete message?</h2>
+          <p>"<span id="delete-dialog-title"></span>" will be removed for everyone. This can't be undone.</p>
+          <div class="dialog-actions">
+            <button value="cancel" class="secondary-button">Cancel</button>
+            <button value="confirm" class="danger-button">Delete</button>
+          </div>
+        </form>
+      </dialog>
+      <script src="/js/confirm-delete.js" defer></script>
+    <% } %>
   </main>
 </body>
 </html>

@@ -20,7 +20,7 @@ Follow a clean MVC-style separation:
 - `controllers/` — Request handlers (`authController.js`: sign-up, log-in, log-out; `clubController.js`: join the club via `setMember`, become admin via `setAdmin` (also makes member); `messageController.js`: `index` lists messages via `getAllMessages` and strips author/date for non-members, passes `isAdmin` for delete buttons; create message via `createMessage`, author = `req.user.id`; `deleteMessagePost` via `deleteMessage`)
 - `validators/` — express-validator chains, attached in routers before the controller handler; each array ends with `handleErrors(view, title)`, which re-renders the form on failure, so controllers only handle valid input (`handleErrors.js`: shared error step; `authValidators.js`: `validateSignUp`, `validateLogin`; `clubValidators.js`: `validateJoinClub` checks passcode against `CLUB_PASSCODE`, `validateBecomeAdmin` against `ADMIN_PASSCODE`; `messageValidators.js`: `validateMessage`)
 - `views/` — EJS templates (`index.ejs`, `sign-up.ejs`, `log-in.ejs`, `join-club.ejs`, `become-admin.ejs`, `new-message.ejs`, `error.ejs`); every view gets `currentUser` via `res.locals`
-- `public/` — static assets (`styles.css`)
+- `public/` — static assets (`styles.css`; `js/confirm-delete.js`: opens the `<dialog>` delete-confirmation pop-up for admins)
 - `db/pool.js` — PostgreSQL connection pool configuration
 - `db/queries.js` — All raw SQL queries abstracted into reusable async functions
 - `db/populatedb.js` — Script to create tables (`users`, `messages`, `session`) and seed initial test data
