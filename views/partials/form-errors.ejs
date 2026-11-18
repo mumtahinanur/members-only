@@ -1,0 +1,9 @@
+<%# Validation error list for forms. Reads the page's `errors` array
+    (each item has .msg); renders nothing when there are no errors. %>
+<% if (errors.length) { %>
+  <ul class="errors" role="alert">
+    <% errors.forEach((error) => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>

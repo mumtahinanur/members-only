@@ -1,0 +1,39 @@
+<%# Shared top of every page: <head>, site header and nav, opening <main>.
+    Uses locals.currentUser (not bare currentUser) so pages rendered before the
+    res.locals middleware ran (e.g. some error pages) don't crash. %>
+<% const user = locals.currentUser; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1><a href="/">Members Only</a></h1>
+    <nav>
+      <% if (user) { %>
+        <span>Hi, <%= user.first_name %></span>
+        <% if (user.is_member) { %>
+          <span class="badge">Member</span>
+        <% } else { %>
+          <a href="/join-club">Join the club</a>
+        <% } %>
+        <% if (user.is_admin) { %>
+          <span class="badge">Admin</span>
+        <% } else { %>
+          <a href="/become-admin">Become admin</a>
+        <% } %>
+        <a href="/messages/new">Create a new message</a>
+        <form action="/log-out" method="post" class="inline-form">
+          <button type="submit" class="link-button">Log out</button>
+        </form>
+      <% } else { %>
+        <a href="/sign-up">Sign up</a>
+        <a href="/log-in">Log in</a>
+      <% } %>
+    </nav>
+  </header>
+  <main>

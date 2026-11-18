@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-  <header>
-    <h1><a href="/">Members Only</a></h1>
-  </header>
-  <main>
+<%- include("partials/header") %>
     <h2>Join the club</h2>
 
     <% if (currentUser.is_member) { %>
@@ -19,13 +7,7 @@
     <% } else { %>
       <p>Know the secret passcode? Enter it to become a member.</p>
 
-      <% if (errors.length) { %>
-        <ul class="errors" role="alert">
-          <% errors.forEach((error) => { %>
-            <li><%= error.msg %></li>
-          <% }) %>
-        </ul>
-      <% } %>
+      <%- include("partials/form-errors") %>
 
       <form action="/join-club" method="post" class="form">
         <label for="passcode">Passcode</label>
@@ -34,6 +16,4 @@
         <button type="submit">Join</button>
       </form>
     <% } %>
-  </main>
-</body>
-</html>
+<%- include("partials/footer") %>

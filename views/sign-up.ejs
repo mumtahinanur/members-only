@@ -1,25 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-  <header>
-    <h1><a href="/">Members Only</a></h1>
-  </header>
-  <main>
+<%- include("partials/header") %>
     <h2>Sign up</h2>
 
-    <% if (errors.length) { %>
-      <ul class="errors" role="alert">
-        <% errors.forEach((error) => { %>
-          <li><%= error.msg %></li>
-        <% }) %>
-      </ul>
-    <% } %>
+    <%- include("partials/form-errors") %>
 
     <form action="/sign-up" method="post" class="form">
       <label for="firstName">First name</label>
@@ -44,6 +26,4 @@
 
       <button type="submit">Create account</button>
     </form>
-  </main>
-</body>
-</html>
+<%- include("partials/footer") %>
