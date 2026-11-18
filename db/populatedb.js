@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 // Schema. IF NOT EXISTS makes it safe to re-run. This is the only place the
 // schema is defined.
-const SQL = `
+const SCHEMA_SQL = `
   CREATE TABLE IF NOT EXISTS users (
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     first_name    VARCHAR(100) NOT NULL,
@@ -52,12 +52,12 @@ const SEED_MESSAGES_SQL = `
 `;
 
 async function main() {
-  // Usage: node db/populatedb.js [connection-string]
-  // Falls back to DATABASE_URL (loaded by --env-file in `npm run populatedb`).
+  // Usage: node --env-file=.env db/populatedb.js  (or pass a connection string)
+  // Uses the connection-string argument if given, otherwise DATABASE_URL.
   const connectionString = process.argv[2] ?? process.env.DATABASE_URL;
   const client = new Client({ connectionString });
   await client.connect();
-  await client.query(SQL);
+  await client.query(SCHEMA_SQL);
 
   const { rows } = await client.query("SELECT COUNT(*) FROM users");
   if (Number(rows[0].count) === 0) {

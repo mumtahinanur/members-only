@@ -37,7 +37,10 @@ app.use("/", messageRouter);
 
 // 404 handler (runs when no route matched)
 app.use((req, res) => {
-  res.status(404).render("error", { title: "Not Found", message: "Page not found." });
+  res.status(404).render("error", {
+    title: "Not Found",
+    message: "Page not found.",
+  });
 });
 
 // Error handler (four arguments marks it as error-handling middleware)
@@ -48,7 +51,6 @@ app.use((err, req, res, next) => {
     message: "Something went wrong.",
   });
 });
-
 
 app.listen(PORT, (error) => {
   if (error) {

@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import * as db from "../db/queries.js";
+import { getUserByUsername } from "../db/queries.js";
 import handleErrors from "./handleErrors.js";
 
 // Validation + sanitization rules for the auth forms.
@@ -25,8 +25,10 @@ export const validateSignUp = [
     .matches(/^[a-z0-9_]+$/).withMessage("Username may only contain letters, numbers and underscores.")
     // Custom async validator: throw (or reject) to fail.
     .custom(async (username) => {
-      const existing = await db.getUserByUsername(username);
-      if (existing) throw new Error("That username is already taken.");
+      const existing = await getUserByUsername(username);
+      if (existing) {
+        throw new Error("That username is already taken.");
+      }
     }),
 
   // Passwords are not trimmed: spaces can be part of a password.

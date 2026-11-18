@@ -5,27 +5,29 @@ const formatDate = (date) =>
   `${date.toLocaleDateString("en-GB", { dateStyle: "medium" })} · ` +
   `${date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`;
 
-// Home page: everyone sees every message, but only members get the author
-// and date. For non-members we drop those fields here, so they never reach
-// the view at all (not just hidden by an if in the template).
+// Shape one database row for the home page. Non-members only get the
+// title and text, so the author and date never reach their browser.
+function toViewMessage(row, isMember) {
+  const message = { id: row.id, title: row.title, text: row.text };
+  if (!isMember) {
+    return message;
+  }
+  return {
+    ...message,
+    author: `${row.first_name} ${row.last_name}`,
+    date: formatDate(row.created_at),
+    isoDate: row.created_at.toISOString(),
+  };
+}
+
+// Home page: everyone sees every message; members also see author and date.
 export async function index(req, res) {
   const isMember = Boolean(req.user?.is_member);
-  const rows = await getAllMessages();
-
-  const messages = rows.map((m) =>
-    isMember
-      ? {
-          id: m.id,
-          title: m.title,
-          text: m.text,
-          author: `${m.first_name} ${m.last_name}`,
-          date: formatDate(m.created_at),
-          isoDate: m.created_at.toISOString(),
-        }
-      : { id: m.id, title: m.title, text: m.text },
-  );
-
   const isAdmin = Boolean(req.user?.is_admin);
+
+  const rows = await getAllMessages();
+  const messages = rows.map((row) => toViewMessage(row, isMember));
+
   res.render("index", { title: "Members Only", messages, isMember, isAdmin });
 }
 
