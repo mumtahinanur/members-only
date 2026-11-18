@@ -9,8 +9,7 @@ passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
       const user = await getUserByUsername(username);
-      const passwordMatches =
-        user && (await bcrypt.compare(password, user.password_hash));
+      const passwordMatches = user && (await bcrypt.compare(password, user.password_hash));
 
       // Same message for "no such user" and "wrong password", so the form
       // doesn't reveal which usernames exist.

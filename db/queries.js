@@ -13,10 +13,7 @@ export async function createUser({ firstName, lastName, username, passwordHash }
 }
 
 export async function getUserByUsername(username) {
-  const { rows } = await pool.query(
-    "SELECT * FROM users WHERE username = LOWER($1)",
-    [username],
-  );
+  const { rows } = await pool.query("SELECT * FROM users WHERE username = LOWER($1)", [username]);
   return rows[0];
 }
 
@@ -26,18 +23,12 @@ export async function getUserById(id) {
 }
 
 export async function setMember(userId) {
-  await pool.query(
-    "UPDATE users SET is_member = TRUE WHERE id = $1",
-    [userId],
-  );
+  await pool.query("UPDATE users SET is_member = TRUE WHERE id = $1", [userId]);
 }
 
 // Admins are always members too, so they can see message authors.
 export async function setAdmin(userId) {
-  await pool.query(
-    "UPDATE users SET is_admin = TRUE, is_member = TRUE WHERE id = $1",
-    [userId],
-  );
+  await pool.query("UPDATE users SET is_admin = TRUE, is_member = TRUE WHERE id = $1", [userId]);
 }
 
 // ---------- Messages ----------

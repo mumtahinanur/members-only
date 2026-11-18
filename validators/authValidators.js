@@ -10,19 +10,25 @@ import handleErrors from "./handleErrors.js";
 export const validateSignUp = [
   body("firstName")
     .trim()
-    .notEmpty().withMessage("First name is required.")
-    .isLength({ max: 100 }).withMessage("First name must be at most 100 characters."),
+    .notEmpty()
+    .withMessage("First name is required.")
+    .isLength({ max: 100 })
+    .withMessage("First name must be at most 100 characters."),
 
   body("lastName")
     .trim()
-    .notEmpty().withMessage("Last name is required.")
-    .isLength({ max: 100 }).withMessage("Last name must be at most 100 characters."),
+    .notEmpty()
+    .withMessage("Last name is required.")
+    .isLength({ max: 100 })
+    .withMessage("Last name must be at most 100 characters."),
 
   body("username")
     .trim()
     .toLowerCase()
-    .isLength({ min: 3, max: 50 }).withMessage("Username must be 3 to 50 characters.")
-    .matches(/^[a-z0-9_]+$/).withMessage("Username may only contain letters, numbers and underscores.")
+    .isLength({ min: 3, max: 50 })
+    .withMessage("Username must be 3 to 50 characters.")
+    .matches(/^[a-z0-9_]+$/)
+    .withMessage("Username may only contain letters, numbers and underscores.")
     // Custom async validator: throw (or reject) to fail.
     .custom(async (username) => {
       const existing = await getUserByUsername(username);
@@ -32,8 +38,7 @@ export const validateSignUp = [
     }),
 
   // Passwords are not trimmed: spaces can be part of a password.
-  body("password")
-    .isLength({ min: 8 }).withMessage("Password must be at least 8 characters."),
+  body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters."),
 
   // Custom validator: compare against the other field via req.body.
   body("confirmPassword")
@@ -45,13 +50,9 @@ export const validateSignUp = [
 
 // Login only checks the fields are filled in; passport checks the credentials.
 export const validateLogin = [
-  body("username")
-    .trim()
-    .toLowerCase()
-    .notEmpty().withMessage("Username is required."),
+  body("username").trim().toLowerCase().notEmpty().withMessage("Username is required."),
 
-  body("password")
-    .notEmpty().withMessage("Password is required."),
+  body("password").notEmpty().withMessage("Password is required."),
 
   handleErrors("log-in", "Log in"),
 ];

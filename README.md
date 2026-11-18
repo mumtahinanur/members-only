@@ -9,12 +9,12 @@ permissions.
 
 ## Who can do what
 
-| | Read messages | See author & date | Post messages | Delete messages |
-|---|:-:|:-:|:-:|:-:|
-| Visitor (logged out) | ✓ | | | |
-| User (signed up) | ✓ | | ✓ | |
-| Member (entered club passcode) | ✓ | ✓ | ✓ | |
-| Admin (entered admin passcode) | ✓ | ✓ | ✓ | ✓ |
+|                                | Read messages | See author & date | Post messages | Delete messages |
+| ------------------------------ | :-----------: | :---------------: | :-----------: | :-------------: |
+| Visitor (logged out)           |       ✓       |                   |               |                 |
+| User (signed up)               |       ✓       |                   |       ✓       |                 |
+| Member (entered club passcode) |       ✓       |         ✓         |       ✓       |                 |
+| Admin (entered admin passcode) |       ✓       |         ✓         |       ✓       |        ✓        |
 
 Every permission is checked on the server, not just hidden in the page.
 
@@ -55,16 +55,25 @@ Requires Node.js 20.6+ (for `--env-file`) and a PostgreSQL database.
    ```
    Then open http://localhost:8000.
 
+### Linting & formatting
+
+```sh
+npm run lint          # ESLint: bug checks + always-use-braces rule
+npm run lint:fix      # auto-fix what ESLint can
+npm run format        # Prettier: reformat all files
+npm run format:check  # check formatting without changing files
+```
+
 ### Test accounts
 
 The seed script creates these accounts, all with the password `password123`.
 They're for local testing only.
 
-| Username | Role |
-|---|---|
-| `admin` | admin + member |
-| `member` | member |
-| `outsider` | regular user |
+| Username   | Role           |
+| ---------- | -------------- |
+| `admin`    | admin + member |
+| `member`   | member         |
+| `outsider` | regular user   |
 
 ## Project structure
 

@@ -43,8 +43,9 @@ app.use((req, res) => {
   });
 });
 
-// Error handler (four arguments marks it as error-handling middleware)
-app.use((err, req, res, next) => {
+// Error handler. Express recognises it by its four parameters, so `_next`
+// must stay even though it's unused (the _ tells ESLint that's intentional).
+app.use((err, req, res, _next) => {
   console.error(err);
   res.status(err.status || 500).render("error", {
     title: "Error",
